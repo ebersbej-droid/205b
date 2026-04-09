@@ -8,8 +8,8 @@ REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 echo 'Downloading data from lab git...'
 TMP_DIR=$(mktemp -d)
 
-# Creating fitered file folder
-data=$(date +%Y-%m-%d)
+# Creating fitered file folder with ze date
+TODAY=$(date +%Y-%m-%d)
 
 # Ran native python3 in line since:
 # 1. wasn't sure I could add curl/wget etc. to docker file (I figured we need unzip for obvious reasons)
@@ -17,7 +17,7 @@ data=$(date +%Y-%m-%d)
 
 python3 -c "import urllib.request; url = 'https://raw.githubusercontent.com/joachimvandekerckhove/cogs205b-s26/9dca64e57fd88213f2422c19a8b10953a8fbfdbe/modules/02-version-control/files/data.zip'; urllib.request.urlretrieve(url,'$TMP_DIR/local_file.zip')"
 
- Unpack ZIP to temp directory
+#Unpack ZIP to temp directory
 unzip -q "$TMP_DIR/local_file.zip" -d "$TMP_DIR/unzipped"
 
 # Create date-named data directory
@@ -36,7 +36,7 @@ git -C "$REPO_ROOT" push origin main
 
 echo "File filtered & folder '$data' created."
 
-# Clean up temp directory
+# Remove temp directory
 rm -rf "$TMP_DIR"
 
 echo "We done :3"

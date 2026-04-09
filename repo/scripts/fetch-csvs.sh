@@ -34,7 +34,7 @@ git -C "$REPO_ROOT" commit -m "added filtered data"
 git -C "$REPO_ROOT" pull --rebase origin main
 git -C "$REPO_ROOT" push origin main
 
-echo "File filtered & folder '$data' created."
+echo "File filtered & folder '$TODAY' created."
 
 # Remove temp directory
 rm -rf "$TMP_DIR"

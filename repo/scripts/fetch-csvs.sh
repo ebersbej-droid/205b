@@ -38,6 +38,6 @@ git -C "$REPO_ROOT" push origin main
 echo "File filtered & folder '$today' created."
 
 # Remove temp directory
-rm -r "$temp_directory"
+rm -rf "$temp_directory"
 
 echo "We done :3"

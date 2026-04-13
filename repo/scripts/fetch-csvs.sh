@@ -9,6 +9,9 @@ REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 echo 'Downloading data from lab git...'
 temp_directory=$(mktemp -d)
 
+# Kept getting this issue where the temp would not self delete so adding this
+trap "rm -rf '$temp_directory'" EXIT
+
 # Creating fitered file folder with ze date
 today=$(date +%Y-%m-%d)
 
@@ -36,8 +39,5 @@ git -C "$REPO_ROOT" pull --rebase origin main
 git -C "$REPO_ROOT" push origin main
 
 echo "File filtered & folder '$today' created."
-
-# Remove temp directory
-rm -r "$temp_directory"
 
 echo "We done :3"

@@ -9,7 +9,7 @@ REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 echo 'Downloading data from lab git...'
 temp_directory=$(mktemp -d)
 
-# Kept getting this issue where the temp would not self delete so adding this
+# Kept getting this issue where the temp would not self delete so adding this 'exit' line
 trap "rm -rf '$temp_directory'" EXIT
 
 # Creating fitered file folder with ze date

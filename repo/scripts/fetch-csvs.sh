@@ -18,8 +18,8 @@ trap "rm -rf '$temp_directory'" EXIT
 today=$(date +%Y-%m-%d)
 
 # Ran native python3 in line since:
-# 1. wasn't sure I could add curl/wget etc. to docker file (I figured we need unzip for obvious reasons)
-# 2. can somehow make a seperate .py file to run this command/code
+# 1. I wasn't sure if we could add curl/wget etc. to docker file (I figured we need unzip for obvious reasons)
+# 2. Not sure if we could include a seperate .py file to run this command/code
 
 python3 -c "import urllib.request; url = 'https://raw.githubusercontent.com/joachimvandekerckhove/cogs205b-s26/9dca64e57fd88213f2422c19a8b10953a8fbfdbe/modules/02-version-control/files/data.zip'; urllib.request.urlretrieve(url,'$temp_directory/local_file.zip')"
 

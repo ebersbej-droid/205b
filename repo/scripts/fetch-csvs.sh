@@ -7,7 +7,9 @@ REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Make temp folders and pull data
 echo 'Downloading data from lab git...'
-temp_directory=$(mktemp -d)
+
+temp_directory="$REPO_ROOT/.tmp_download"
+mkdir -p "$temp_directory"
 
 # Kept getting this issue where the temp would not self delete so adding this 'exit' line
 trap "rm -rf '$temp_directory'" EXIT

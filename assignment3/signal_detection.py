@@ -1,6 +1,5 @@
 # import packages
 
-# pip3 install numpy --break-system-packages (using object oriented programing, make each a class)
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats  #install as 'scipy'

@@ -2,7 +2,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy import stats  #install as 'scipy'
+from scipy import stats 
 import pandas as pd
 import math
 
@@ -136,27 +136,30 @@ class SignalDetection:
 
     @staticmethod
     def plot_roc(sdt_list):
-        # Collect hit and FA rates, anchoring with (0,0) and (1,1)
-        hit_rates = [0.0] + [sd.hit_rate()         for sd in sdt_list] + [1.0]
-        fa_rates  = [0.0] + [sd.false_alarm_rate()  for sd in sdt_list] + [1.0]
-
-        # Sort by hit rate (x-axis) so the curve draws cleanly
+        # Collect hit and FA rates, anchoring with (0,0) and (1,1) for the ROC curve
+        hit_rates = [0.0] + [sd.hit_rate() for sd in sdt_list] + [1.0]
+        fa_rates  = [0.0] + [sd.false_alarm_rate() for sd in sdt_list] + [1.0]
+        
+        # glad I found the zip function to easily pair data into coorinates 
+        # sort by hit rate (x-axis) so the curve draws cleanly
         pairs = sorted(zip(hit_rates, fa_rates))
         hit_rates_sorted, fa_rates_sorted = zip(*pairs)
 
         fig, ax = plt.subplots()
         ax.plot(hit_rates_sorted, fa_rates_sorted, marker='o', color='blue')
+        # labeling ze chart
         ax.set_xlabel('Hit Rate')
         ax.set_ylabel('False Alarm Rate')
         ax.set_title('ROC Curve')
+        # setting chart axis limits
         ax.set_xlim([0, 1])
         ax.set_ylim([0, 1])
+        # prevent axis labels being clipped
         plt.tight_layout()
+        # save figure in current directory
         plt.savefig('roc_plot.png')
         plt.close()
         return fig, ax 
-
-# test data
 
 # test data (included values that would raise errors for show)
 sd1 = SignalDetection(40, 10, 20, 30)
@@ -170,7 +173,7 @@ print(sd3)
 
 print("\n--- Operators ---")
 print("sd1 + sd2 :", sd1 + sd2)
-try:
+try: # using try so we can push through the error(s) to the plotting section
     print("sd1 - sd2 :", sd1 - sd2)
 except ValueError as exc:
     print(f"sd1 - sd2 : caught ValueError: {exc}")
@@ -179,15 +182,14 @@ print("3 * sd2   :", 3 * sd2)
 
 print("\n--- Validation ---")
 for bad, label in [
-    (lambda: SignalDetection(-1, 10, 5, 5),   "negative count"),
-    (lambda: SignalDetection("a", 10, 5, 5),  "string count"),
+    (lambda: SignalDetection(-1, 10, 5, 5), "negative count"),
+    (lambda: SignalDetection("a", 10, 5, 5), "string count"),
     (lambda: SignalDetection(True, 10, 5, 5), "boolean count"),
-    (lambda: sd1 * -1,                         "negative factor"),
-    (lambda: sd1 + 5,                          "add non-SDT"),
-]:
+    (lambda: sd1 * -1, "negative factor"),
+    (lambda: sd1 + 5, "add non-SDT"),]:
     try:
         result = bad()
-        print(f"  {label}: (no error — unexpected)")
+        print(f"  {label}: (no errors found)") # obvously I will have bad data, but ya know
     except (TypeError, ValueError) as exc:
         print(f"  {label}: caught {type(exc).__name__}: {exc}")
 

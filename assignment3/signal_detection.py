@@ -3,7 +3,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats 
-import pandas as pd
 import math
 
 
@@ -32,20 +31,20 @@ class SignalDetection:
     def hit_rate(self):
         denominator = self.hits + self.misses
         if denominator == 0:
-            raw = 0.0
-        else:
-            raw = self.hits / denominator
-        # Dealing with edge cases
-        return float(np.clip(raw, 1e-10, 1.0 - 1e-10))
-
+            raise ValueError("Hit rate is undefined: hits + misses = 0.")
+        rate = self.hits / denominator
+        if rate == 0.0 or rate == 1.0:
+            raise ValueError(f"Hit rate is on the boundary ({rate}), Z-score is undefined.")
+        return rate
+        
     def false_alarm_rate(self):
         denominator = self.false_alarms + self.correct_rejections
         if denominator == 0:
-            raw = 0.0
-        else:
-            raw = self.false_alarms / denominator
-        # dealing with edge cases again
-        return float(np.clip(raw, 1e-10, 1.0 - 1e-10))
+            raise ValueError("False alarm rate is undefined: false_alarms + correct_rejections = 0.")
+        rate = self.false_alarms / denominator
+        if rate == 0.0 or rate == 1.0:
+            raise ValueError(f"False alarm rate is on the boundary ({rate}), Z-score is undefined.")
+        return rate
 
     def d_prime(self):
         return stats.norm.ppf(self.hit_rate()) - stats.norm.ppf(self.false_alarm_rate())
@@ -130,8 +129,6 @@ class SignalDetection:
         ax.set_title('Signal Detection Theory')
         ax.legend()
         plt.tight_layout()
-        plt.savefig('sdt_plot.png')
-        plt.close()
         return fig, ax 
 
     @staticmethod
@@ -162,9 +159,10 @@ class SignalDetection:
         return fig, ax 
 
 # test data (included values that would raise errors for show)
-sd1 = SignalDetection(40, 10, 20, 30)
-sd2 = SignalDetection(30, 20, 10, 40)
-sd3 = SignalDetection(50,  5, 15, 35)
+if __name__ == '__main__':
+    sd1 = SignalDetection(40, 10, 20, 30)
+    sd2 = SignalDetection(30, 20, 10, 40)
+    sd3 = SignalDetection(50,  5, 15, 35)
 
 print("\n --- Test Data ---")
 print(sd1)
@@ -173,7 +171,7 @@ print(sd3)
 
 print("\n--- Operators ---")
 print("sd1 + sd2 :", sd1 + sd2)
-try: # using try so we can push through the error(s) to the plotting section
+try:
     print("sd1 - sd2 :", sd1 - sd2)
 except ValueError as exc:
     print(f"sd1 - sd2 : caught ValueError: {exc}")
@@ -195,3 +193,4 @@ for bad, label in [
 
 SignalDetection.plot_roc([sd1, sd2, sd3])
 sd1.plot_sdt()
+plt.show()

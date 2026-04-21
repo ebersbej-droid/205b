@@ -154,8 +154,6 @@ class SignalDetection:
         # prevent axis labels being clipped
         plt.tight_layout()
         # save figure in current directory
-        plt.savefig('roc_plot.png')
-        plt.close()
         return fig, ax 
 
 # test data (included values that would raise errors for show)
@@ -164,33 +162,33 @@ if __name__ == '__main__':
     sd2 = SignalDetection(30, 20, 10, 40)
     sd3 = SignalDetection(50,  5, 15, 35)
 
-print("\n --- Test Data ---")
-print(sd1)
-print(sd2)
-print(sd3)
+    print("\n --- Test Data ---")
+    print(sd1)
+    print(sd2)
+    print(sd3)
 
-print("\n--- Operators ---")
-print("sd1 + sd2 :", sd1 + sd2)
-try:
-    print("sd1 - sd2 :", sd1 - sd2)
-except ValueError as exc:
-    print(f"sd1 - sd2 : caught ValueError: {exc}")
-print("sd1 * 2   :", sd1 * 2)
-print("3 * sd2   :", 3 * sd2)
-
-print("\n--- Validation ---")
-for bad, label in [
-    (lambda: SignalDetection(-1, 10, 5, 5), "negative count"),
-    (lambda: SignalDetection("a", 10, 5, 5), "string count"),
-    (lambda: SignalDetection(True, 10, 5, 5), "boolean count"),
-    (lambda: sd1 * -1, "negative factor"),
-    (lambda: sd1 + 5, "add non-SDT"),]:
+    print("\n--- Operators ---")
+    print("sd1 + sd2 :", sd1 + sd2)
     try:
-        result = bad()
-        print(f"  {label}: (no errors found)") # obvously I will have bad data, but ya know
-    except (TypeError, ValueError) as exc:
-        print(f"  {label}: caught {type(exc).__name__}: {exc}")
+        print("sd1 - sd2 :", sd1 - sd2)
+    except ValueError as exc:
+        print(f"sd1 - sd2 : caught ValueError: {exc}")
+    print("sd1 * 2   :", sd1 * 2)
+    print("3 * sd2   :", 3 * sd2)
 
+    print("\n--- Validation ---")
+    for bad, label in [
+        (lambda: SignalDetection(-1, 10, 5, 5), "negative count"),
+        (lambda: SignalDetection("a", 10, 5, 5), "string count"),
+        (lambda: SignalDetection(True, 10, 5, 5), "boolean count"),
+        (lambda: sd1 * -1, "negative factor"),
+        (lambda: sd1 + 5, "add non-SDT"),]:
+        try:
+            result = bad()
+            print(f"  {label}: (no errors found)")
+        except (TypeError, ValueError) as exc:
+            print(f"  {label}: caught {type(exc).__name__}: {exc}")
+            
 SignalDetection.plot_roc([sd1, sd2, sd3])
 sd1.plot_sdt()
 plt.show()

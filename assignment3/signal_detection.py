@@ -153,7 +153,6 @@ class SignalDetection:
         ax.set_ylim([0, 1])
         # prevent axis labels being clipped
         plt.tight_layout()
-        # save figure in current directory
         return fig, ax 
 
 # test data (included values that would raise errors for show)
@@ -189,6 +188,6 @@ if __name__ == '__main__':
         except (TypeError, ValueError) as exc:
             print(f"  {label}: caught {type(exc).__name__}: {exc}")
 
-SignalDetection.plot_roc([sd1, sd2, sd3])
+    SignalDetection.plot_roc([sd1, sd2, sd3])
     sd1.plot_sdt()
     plt.show()

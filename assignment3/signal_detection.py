@@ -188,7 +188,7 @@ if __name__ == '__main__':
             print(f"  {label}: (no errors found)")
         except (TypeError, ValueError) as exc:
             print(f"  {label}: caught {type(exc).__name__}: {exc}")
-            
+
 SignalDetection.plot_roc([sd1, sd2, sd3])
-sd1.plot_sdt()
-plt.show()
+    sd1.plot_sdt()
+    plt.show()

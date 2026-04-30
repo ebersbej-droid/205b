@@ -32,10 +32,10 @@ class TestBayesFactor(unittest.TestCase):
         self.assertEqual(str(context.exception), "n and k must be integers")
     
     def test_reject_non_integer_k(self):
-            # float error for k
-            with self.assertRaises(TypeError) as context:
-                BayesFactor(10, 5.5)
-            self.assertEqual(str(context.exception), "n and k must be integers")
+        # float error for k
+        with self.assertRaises(TypeError) as context:
+            BayesFactor(10, 5.5)
+        self.assertEqual(str(context.exception), "n and k must be integers")
 
     def test_reject_bool_k(self):
         # boolean error for k
@@ -98,10 +98,8 @@ class TestBayesFactor(unittest.TestCase):
         # make sure that all required API methods are present
         methods = ['likelihood', 'evidence_slab', 'evidence_spike', 'bayes_factor']
         for m in methods:
-          is_callable = callable(getattr(self.bf, m, None))
-          self.assertTrue(
-              is_callable, 
-              f"Required method '{m}' is missing or is not callable!")
+            is_callable = callable(getattr(self.bf, m, None))
+            self.assertTrue(is_callable, f"Required method '{m}' is missing or is not callable!")
 
     def test_default_prior_bounds(self):
         # checking prior boundaries
@@ -129,8 +127,8 @@ class TestBayesFactor(unittest.TestCase):
     # ----------Math consistency checks ----------------
 
     def test_likelihood_at_extreme_points(self):
-      # if theta=0 you can't have any successes, and if theta=1 you can't have any failures
-      # soooo likelihood has to be 0 at both extremes (specifically for our n=10, k=5 fixture)
+        # if theta=0 you can't have any successes, and if theta=1 you can't have any failures
+        # soooo likelihood has to be 0 at both extremes (specifically for our n=10, k=5 fixture)
         self.assertEqual(self.bf.likelihood(0.0), 0.0)
         self.assertEqual(self.bf.likelihood(1.0), 0.0)
 

@@ -46,5 +46,5 @@ class BayesFactor:
         ev_slab = self.evidence_slab()
         ev_spike = self.evidence_spike()
         if ev_slab == 0:
-            return float('inf')  # Avoid dividing by 0    
+            return float('inf')  # edge case handling( slab evidence is 0, spike wins infinitely) 
         return ev_spike / ev_slab

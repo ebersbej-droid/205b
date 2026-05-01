@@ -17,31 +17,31 @@ class TestBayesFactor(unittest.TestCase):
         # float error for n
         with self.assertRaises(TypeError) as context:
             BayesFactor(10.5, 5)
-        self.assertEqual(str(context.exception), "n and k must be integers")
+        self.assertEqual(str(context.exception), "n must be an integer")
     
     def test_reject_non_integer_string_n(self):
         # string error for n
         with self.assertRaises(TypeError) as context:
             BayesFactor('10.5', 5)
-        self.assertEqual(str(context.exception), "n and k must be integers")
+        self.assertEqual(str(context.exception), "n must be an integer")
     
     def test_reject_bool_n(self):
         # boolean error for n (added bool checks since python treats them as ints)
         with self.assertRaises(TypeError) as context:
             BayesFactor(True, 1)
-        self.assertEqual(str(context.exception), "n and k must be integers")
+        self.assertEqual(str(context.exception), "n must be an integer")
     
     def test_reject_non_integer_k(self):
         # float error for k
         with self.assertRaises(TypeError) as context:
             BayesFactor(10, 5.5)
-        self.assertEqual(str(context.exception), "n and k must be integers")
+        self.assertEqual(str(context.exception), "k must be an integer")
 
     def test_reject_bool_k(self):
         # boolean error for k
         with self.assertRaises(TypeError) as context:
             BayesFactor(1, False)
-        self.assertEqual(str(context.exception), "n and k must be integers")
+        self.assertEqual(str(context.exception), "k must be an integer")
 
     # Verify TypeError and specific message for negative n & k values
 
@@ -49,13 +49,13 @@ class TestBayesFactor(unittest.TestCase):
         # negative value error for n
         with self.assertRaises(ValueError) as context:
             BayesFactor(-10, 5)
-        self.assertEqual(str(context.exception), "n and k cannot be negative")
+        self.assertEqual(str(context.exception), "n cannot be negative")
     
     def test_reject_negative_counts_k(self):
         # negative value error for k
         with self.assertRaises(ValueError) as context:
             BayesFactor(5, -10)
-        self.assertEqual(str(context.exception), "n and k cannot be negative")
+        self.assertEqual(str(context.exception), "k cannot be negative")
 
     # checking theta now for input errors and error messages
 
@@ -85,6 +85,15 @@ class TestBayesFactor(unittest.TestCase):
             BayesFactor(10, 5, a=0.6, b=0.4)
         self.assertEqual(str(context.exception), "Parameter 'a' must be strictly less than 'b'")
     
+    # If we instead raise an error for edge cases rather than setting to 'inf'
+
+    # def test_bayes_factor_undefined_when_slab_is_zero(self):
+    #     # edge case test: if slab evidence is 0, Bayes Factor is undefined
+    #     bf = BayesFactor(0, 0, a=0.0, b=0.0) 
+    #     with self.assertRaises(ValueError) as context:
+    #         bf.bayes_factor()
+    #     self.assertEqual(str(context.exception), "Slab evidence is zero; Bayes Factor is undefined")
+        
     # value(s) consistency test
 
     def test_object_state_consistent(self):

@@ -4,10 +4,14 @@ import scipy.integrate
 class BayesFactor:
     def __init__(self, n, k, a=0.4999, b=0.5001):
         #Input and state validation
-        if not isinstance(n, int) or isinstance(n, bool) or not isinstance(k, int) or isinstance(k, bool):
-            raise TypeError("n and k must be integers")
-        if n < 0 or k < 0:
-            raise ValueError("n and k cannot be negative")
+        if not isinstance(n, int) or isinstance(n, bool):
+            raise TypeError("n must be an integer")
+        if not isinstance(k, int) or isinstance(k, bool):
+            raise TypeError("k must be an integer")
+        if n < 0:
+            raise ValueError("n cannot be negative")
+        if k < 0:
+            raise ValueError("k cannot be negative")
         if k > n:
             raise ValueError("k cannot be greater than n (impossible binomial state)")
         if a >= b:
@@ -20,7 +24,7 @@ class BayesFactor:
 
     def likelihood(self, theta):
         # checking theta
-        if not isinstance(theta, (int, float)):
+        if not isinstance(theta, (int, float) or isinstance(theta, bool)):
             raise TypeError("theta must be a number")
         if not (0 <= theta <= 1):
             raise ValueError("theta must be between 0 and 1")
@@ -46,5 +50,6 @@ class BayesFactor:
         ev_slab = self.evidence_slab()
         ev_spike = self.evidence_spike()
         if ev_slab == 0:
-            return float('inf')  # edge case handling( slab evidence is 0, spike wins infinitely) 
+            return float('inf')  # edge case of zero evidence by returning infinity
+            # raise ValueError("Slab evidence is zero; Bayes Factor is undefined") 
         return ev_spike / ev_slab

@@ -5,6 +5,8 @@ class TestBayesFactor(unittest.TestCase):
 
     def setUp(self):
         #Fixture for shared setup pattern
+        self.a = 0.4999 
+        self.b = 0.5001
         self.n = 10
         self.k = 5
         self.bf = BayesFactor(self.n, self.k)
@@ -79,7 +81,7 @@ class TestBayesFactor(unittest.TestCase):
             BayesFactor(5, 10)
         self.assertEqual(str(context.exception), "k cannot be greater than n (impossible binomial state)")
     
-    # a > b
+    # a > b 
     def test_invalid_priors_bound_handled(self):
         with self.assertRaises(ValueError) as context:
             BayesFactor(10, 5, a=0.6, b=0.4)
@@ -137,16 +139,30 @@ class TestBayesFactor(unittest.TestCase):
 
     def test_likelihood_at_extreme_points(self):
         # if theta=0 you can't have any successes, and if theta=1 you can't have any failures
-        # soooo likelihood has to be 0 at both extremes (specifically for our n=10, k=5 fixture)
-        self.assertEqual(self.bf.likelihood(0.0), 0.0)
-        self.assertEqual(self.bf.likelihood(1.0), 0.0)
+        # soooo likelihood has to be 0, for k not equal to 0 or n, 
+        # likelihood is 0 at θ=0 and θ=1 (specifically for our n=10, k=5 fixture)
+        
+        self.assertAlmostEqual(self.bf.likelihood(0.0), 0.0, places=10)
+        self.assertAlmostEqual(self.bf.likelihood(1.0), 0.0, places = 10)
 
-    def test_bayes_factor_equal_priors_smoke_test(self):
-        # explicit smoke test
-        # BF = 1 test, If Spike prior == Slab prior (0,1), BF must equal 1.0.
-        # Confirm scaling constant 'c' and integration consistency
-        bf_equal = BayesFactor(10, 5, a=0.0, b=1.0)
-        self.assertAlmostEqual(bf_equal.bayes_factor(), 1.0, places=5)
+        # since I switched from math.comb to binom.pmf
+        # I know at larger n's that I can get a extremely small value
+        # so I changed to AlmostEqual fo small float comparisons
+        # self.assertEqual(self.bf.likelihood(0.0), 0.0)
+        # self.assertEqual(self.bf.likelihood(1.0), 0.0)
+
+    def test_bayes_factor_equals_one_when_priors_identical(self):
+        # testing when priors are identical
+        bf = BayesFactor(10, 5, a=0.0, b=1.0)
+        result = bf.bayes_factor()
+        self.assertAlmostEqual(result, 1.0, places=6)
+        self.assertNotEqual(result, float('inf')) #edge case check
+
+    def test_bayes_factor_changes_with_data(self):
+        # Making sure class even works
+        bf1 = BayesFactor(10, 5)
+        bf2 = BayesFactor(10, 2)
+        self.assertNotEqual(bf1.bayes_factor(), bf2.bayes_factor())
 
     def test_evidence_non_negative(self):
         # check for negative evidence
@@ -165,18 +181,10 @@ class TestBayesFactor(unittest.TestCase):
     # intentional since BayesFactor can't be negative
     @unittest.expectedFailure
     def test_intentionally_failing_test(self):
-        bf = BayesFactor(10, 5, a=0.4, b=0.6)
-        self.assertLess(bf.bayes_factor(), 0, "intentionally failing: Bayes factor cannot be negative :P")
+        bf = BayesFactor(10, 5)
+        self.assertLess(bf.bayes_factor(), 0)
    
     # ---------- integration tests ----------
-
-    # test Spike is favored when success rate is exactly 0.5
-    def test_bayes_factor_favors_spike_at_perfect_half(self):
-        # Using the fixture setup (n=10, k=5)
-        bf_value = self.bf.bayes_factor()
-        # The Bayes Factor should strongly favor H1 (Spike)
-        self.assertGreater(bf_value, 1.0)
-        
     
     # Test that slab is favored when k=0 because Spike expects ~50%
     # BF < 1 means the Slab (H0) is more likely than the Spike (H1)

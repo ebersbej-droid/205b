@@ -1,0 +1,23 @@
+Implement the BayesFactor class in bayes_factor.py.
+
+The class must have exactly the following method signatures:
+- __init__(self, n, k): n is the number of trials, k is the number of successes
+- likelihood(self, theta): returns the Bernoulli likelihood of k successes in n trials given theta
+- evidence_slab(self): returns the marginal likelihood under the slab prior
+- evidence_spike(self): returns the marginal likelihood under the spike prior
+- bayes_factor(self): returns the Bayes factor as evidence_spike() / evidence_slab()
+
+Prior specifications:
+- Slab prior: uniform distribution over (0, 1)
+- Spike prior: uniform distribution over (0.47, 0.53), the negligible-effect hypothesis from Etz et al. (2018)
+
+The marginal likelihood (evidence) under a uniform prior U(a, b) is:
+- P(data | H) = integral from a to b of likelihood(theta) * 1/(b-a) d(theta)
+
+Do NOT modify the test file under any circumstances.
+Do NOT change the constructor signature __init__(self, n, k).
+The values a=0.47 and b=0.53 MUST be hardcoded inside evidence_spike(), not added as constructor parameters.
+Return only valid JSON with no markdown formatting.
+Do not wrap your response in markdown code fences.
+Do not include ``` anywhere in your response.
+Only return updated code for bayes_factor.py.

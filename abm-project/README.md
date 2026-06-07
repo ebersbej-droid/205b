@@ -224,7 +224,6 @@ The clearest limitation is the single-threshold binding window. Empirical litera
 Requires Python 3.10+ with numpy, pandas, and matplotlib:
 
 ```bash
-pip install -r requirements.txt
 python verify.py
 python run_simulation.py
 python run_simulation.py --sweep

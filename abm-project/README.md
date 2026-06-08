@@ -178,22 +178,26 @@ The clearest limitation is the single-threshold binding window. Empirical litera
 
 ## How to Run
 
+
 ```bash
 python verify.py
 python run_simulation.py
 python run_simulation.py --sweep
+```
 
 Docker:
 
-bash
+```bash
 docker build -t flash-beep-abm .
 docker run flash-beep-abm
+```
 
-Outputs are written to results/ (results_default.csv, sweep CSVs and PNGs).
-To recieve them locall, run:
+Outputs are written to `results/` (`results_default.csv`, sweep CSVs and PNGs).
+To receive them locally, run:
 
-bash
+```bash
 docker run -v $(pwd)/results:/app/results flash-beep-abm
+```
 
 References
 

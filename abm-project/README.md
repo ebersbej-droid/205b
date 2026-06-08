@@ -190,6 +190,11 @@ docker build -t flash-beep-abm .
 docker run flash-beep-abm
 
 Outputs are written to results/ (results_default.csv, sweep CSVs and PNGs).
+To recieve them locall, run:
+
+bash
+docker run -v $(pwd)/results:/app/results flash-beep-abm
+
 References
 
 Shams, L., Kamitani, Y., & Shimojo, S. (2002). Visual illusion induced by sound. Cognitive Brain Research, 14(1), 147–152.
